@@ -1,0 +1,302 @@
+Trabalhando com Branches no GitHub
+MAIN => nova nomenclatura que quando instalado git ele sugere na segunda opção de nomenclatura
+MASTER
+
+Working directory => git add * => staging/index git commit => branch main
+
+Após ter comitado comando para
+Verificar em qual repositório remoto está linkado
+Listar repositórios remotos
+git remote -v
+
+reposiorio remoto, apontando ao repositório remoto a adicionar
+git remote add origin https://github.com/WagnerSolak/nome-do-repositorio
+
+Agora ele deve mostrar os repositórios com a fetch e push após dar comando:
+git remote -v
+
+git pull origin master
+fatal: couldn´t find remote ref master 
+O erro acima é pq no github está como main e não como master
+
+git pull: usado para buscar e baixar conteúdo de repositórios remotos e fazer a atualização imediata ao repositório local para que os conteúdos sejam iguais
+Se fizer o comando, e no github a branch principal ser main, ok
+git pull origin main
+
+git branch
+
+git push origin master
+
+A Tag HEAD
+Head que aponta para a último commit válido em uma branch.
+nomes sempre descritivos
+
+-----esclarecendo com comandos
+
+Comando checkout: usado para se movimentar nas branches
+git checkout -b nova-funcionalidade
+onde b=> significa branch, criando uma nova branch)
+onde nova-funcionalidade=> nome da branch nova
+Ele cria e já se move para esta nova branch
+
+Para se movimentar para a branch main agora:
+git checkout main
+
+Para comitar na branch nova
+git commit -m "Add arq na nova branch"
+
+Para dar push
+git push origin nova-funcionalidade
+
+Case: Tenho 1 arquivo comitado na branch main, e dois arq na branch nova, para adicionar as novas funcionalidades a branch principal:
+Estou na branch nova-funcionlidade
+
+Primeiro anda para a branch que quer juntar
+git checkout main (alterado para branch main)
+
+git merge nova-funcionalidade
+msg: Your branch is ahead of 'origin/main' by 1 commit.
+
+git pus origin main
+
+empurrou para gitHub!
+
+---------movimentações------------------------
+MOSTRAR as branches que estão no repositório local
+git branch
+
+RENOMEAR BRANCH - se movendo
+git checkout nova-funcionalidade
+
+git branch -m funcionalidade
+
+RENOMEAR BRANCH - SEM se mover (main)
+git branch -m funcionalidade nova-funcionalidade
+
+DELETAR BRANCH
+git branch -d nova-funcionalidade
+
+echo > arquivo3.txt
+echo > arquivo4.txt
+git add *
+
+CRIAR nova branch
+git checkout -b funcionalidade-grande
+
+STASH - Trabalhando sem carregar contexto (lixo)
+Pega tudo do Stage Area=Index e add na stash
+git stash save "Adcionando arquivos iniciando alteracoes"
+msg: Saved working directory and index stage on branch
+
+git stash list
+
+CHECAR ESTADO
+git status
+
+echo > arquivo6.txt
+git add *
+git status
+msg: On branch funcionalidade-grande.changes to be committed
+git stash save
+msg: saved working directory and index state WIP(work in progress)
+git stash list
+msg: mostra todos index
+
+AGORA quero estourar, acabar com a caixa temporaria
+git stash pop 1
+git status
+msg: apenas arquivo3.txt e arquivo4.txt estão prontos para serem comitados
+
+FORMAS DE LIMPAR STASH
+
+git stash list
+git stash clear
+git stash list
+não aparece mais stash
+
+------------------git log---------------
+Visualização de hisórico  situar no tempo do projeto e qual trabalho foi executado
+quais ferramenta?
+
+git log
+
+
+Copiar link do github do projeto 
+https://github.com/github/docs
+
+Ir para git bash
+git clone https://github.com/github/docs
+
+Listar
+ls
+
+Navegar até ela
+cd docs/
+
+git log
+Para navegar entre páginas: Page Down or Page up
+Para sair da visualiação digitar: :q
+
+VARIAÇÕES
+Ver histórico apenas de um repositório específico:
+
+ls
+git log nome_pasta
+Util para ver qum trabalhou nessa pasta, quais commits foram realizados, etc
+
+Subcomandos específicos com GitLog
+Trás resumo do log de commits, trazendo os primeiros caratres do commit
+git log --oneline
+
+Trás saída do git log de forma gráfica
+git log --graph
+
+Ferramenta gráfica K
+gitk
+
+---------------------------Revertendo commits------------
+GIT RESET 
+
+git reset => para onde ele esta apontando/revertendo
+SE orientando pelo hash de um commit:
+git reset 8fs7lxc1
+
+SE orientando pelo HEAD
+git reset 
+
+Variações (flag´s) do git reset:
+-- soft
+--mixed
+--hard
+
+Olhe onde a tag HEAD está e mova um para trás
+git reset HEAD~1
+
+Forma Inversa do git add (Volta de Branch Main => Staging)
+git reset --soft HEAD~1 (sem head ele reverte o ultimo commit)
+
+Reverte os arquivos para Working Dir
+git reset HEAD~1 --mixed
+
+Destruir código! É como o commit não estivesse existido
+git reset --hard HEAD~1
+
+--------------------------------------------------------------
+GIT REVERB => Não manipula estados dos arq, ele manipula commit
+
+Podendo se mover orientado a HEAD~1 ou a um HASH específico
+
+1 - Move a head
+2 - Reverte todas as alterações 
+
+Têm uma imagem exemplificando
+Onde a hash 6B1dhs8s repesenta o penultmo commit
+git revert 6B1dhs8s
+
+---------------------------------------------------------
+Estruturação de commits
+
+commit atômico - unidade êm inicio/meio/fim
+nao espalhar monte de coisas desconectas
+
+Estrutura: Assunto/Corpo/Rodapé
+
+ASSUNTO
+
+Até 50 caracteres
+Começar com letra maiúscula.
+Sem ponto.
+Escrito de forma imperativa 
+
+In English use Imperative mood:
+Add a feature NOT: Added a feature
+Modify an existing feature NOT: Modified an existing feature
+
+Use:
+if applied, this commit will: add payment integration
+if applied, this commit will: update databse configurations
+
+Em Português use a voz Imperativa:
+Adiciona a funcionalidade x NÃO: Funcionalidade x adicionada
+Modifica uma funcionlidade existente NÃO: Funcionalidade y modificada
+Remove funcionalidade y NÂO: Funcionalidade y removida
+
+Tb use a regra: Se aceito, esse commit...
+Se aceito, esse commit: adiciona método de pagamento
+Se aceito, esse commit:atualiza configurações do banco de dados
+Se aceito, esse commit: remove código redundante
+
+
+CORPO
+
+Add detalhes ao commit. Tente quebrar a linha em 75 caracteres
+Identifique sua audiência. Explique tudo. Use markdown
+
+Sempre ache qe a pessoa que está vendo o commit está com zero de conhecimento
+
+
+Rodapé
+Referencie assuntos relacionados
+------------------------------------------------------------------
+
+Issues: Questões Debates
+Descrever se tem bug, se algum cliente falou que na page tem problema
+sugerir funcionalidades, etc
+-------------------------------------------------------------------
+VIM => caso digita algum caracter tem como sair sem salvar nada.
+Entrou no vim sem querer? kkkk
+:q! 
+
+Trocar Editor padrão do GitHub (VIM)
+Config para troca pelo VSC:
+
+git config --global core.editor "code -- wait"
+git config --global --list (mostra qual editor está configurado)
+
+Voltar para VIM
+git config --unset core.editor
+git config core.editor "vim"
+
+------------------------------------------------------------------
+
+No VIM:
+Apague msg - aperte v para selecionar
+Aperte insert para escrever
+Add uma mensagem
+QUEBRE a linha
+Coloque os detalhes poque usou a tecnologia por exemplo
+Closes #1  => quando commit subir vai automaticamente interagir na issue
+e fechar ela, resolvida!
+Para sair ESC para sair do modo de edição + :wq 
+
+Exemplo:
+
+Adiciona mensagem de boas vindas
+
+Esse commit modifica o READ.md adicionando uma mensagem de boas vindas
+amigável para novos visitantes. Esse commit faz uso de:
+
+ - Markdown
+ - Sarcasmo
+
+ Closes #1
+
+----
+Semantic Versioning
+
+3.2.7
+Onde 3=> major, 2=> minor, 7=> patch
+major - Sempre que quando tiver há uma quebra de compatibilidade.
+minor - Alteraões sem quebra de retrocompatibilidade.
+patch - Correção de bug, pequenas alterações.
+
+Conventional Commits - SemVer
+site onde mostra a especificação!
+
+
+
+
+
+
+
+
